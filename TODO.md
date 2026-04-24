@@ -24,8 +24,7 @@ Status: Fixing database URL parsing bug causing "Name or service not known"
     - Added clearer user-facing error messages in `app.py`
 
 ## Remaining:
-15. [ ] Commit & push fix to GitHub
+15. [x] Commit & push fix to GitHub
 16. [ ] Verify Render auto-deploy
 17. [ ] Re-test placing an order on live site
-18. [ ] Run `python migrate.py` in Render Shell if needed
 

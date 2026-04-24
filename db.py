@@ -33,6 +33,11 @@ if _parsed.password:
         new_netloc = f"{_parsed.username}:{safe_password}@{_parsed.hostname}"
     DATABASE_URL = urlunparse(_parsed._replace(netloc=new_netloc))
 
+# Diagnostic: print the parsed hostname so we can verify it's correct in Render logs
+_diag = urlparse(DATABASE_URL)
+print(f"[DB] Parsed DB host: {_diag.hostname}")
+print(f"[DB] Parsed DB user: {_diag.username}")
+
 # Create engine with sensible production settings
 engine = create_engine(
     DATABASE_URL,
@@ -43,13 +48,12 @@ engine = create_engine(
     }
 )
 
-# Validate connection on startup so deployment issues surface immediately
+# Validate connection on startup — log result but do NOT crash so logs remain visible
 try:
     with engine.connect() as conn:
         print("[DB] Database connection established successfully.")
 except Exception as exc:
-    print(f"[DB] FATAL: Could not connect to database: {exc}")
-    sys.exit(1)
+    print(f"[DB] WARNING: Could not connect to database on startup: {exc}")
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
