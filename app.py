@@ -246,7 +246,11 @@ def place_order():
             print(f"ERROR in save_order: {str(order_error)}")
             import traceback
             traceback.print_exc()
-            return jsonify({'success': False, 'error': f'Failed to save order: {str(order_error)}'})
+            # Return a user-friendly message for DB connection issues
+            error_msg = str(order_error)
+            if "Name or service not known" in error_msg or "could not connect" in error_msg.lower() or "connection" in error_msg.lower():
+                return jsonify({'success': False, 'error': 'Unable to connect to the database. Please try again in a moment.'}), 503
+            return jsonify({'success': False, 'error': f'Failed to save order: {error_msg}'}), 500
         
         # Save payment method
         try:
