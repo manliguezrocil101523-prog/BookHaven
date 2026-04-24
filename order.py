@@ -1,11 +1,6 @@
 import random
 from sqlalchemy.orm import Session
 from db import SessionLocal
-from models import Order, OrderItem
-
-import random
-from sqlalchemy.orm import Session
-from db import SessionLocal
 from models import Order, OrderItem, Book
 from inventory import update_stock
 
